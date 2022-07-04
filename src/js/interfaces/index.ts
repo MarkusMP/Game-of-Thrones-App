@@ -2,6 +2,6 @@ export interface IState {
   houses: IHouse[];
 }
 
-interface IHouse {
+export interface IHouse {
   name: string;
 }

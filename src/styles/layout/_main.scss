@@ -1,0 +1,30 @@
+@import "../base/variables";
+
+form {
+  margin: 1rem 0;
+
+  input {
+    width: 100%;
+    padding: 15px 15px;
+    border-radius: 5px;
+    border: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+
+  .card {
+    text-align: center;
+
+    h3 {
+      color: $dark-color;
+    }
+  }
+}
