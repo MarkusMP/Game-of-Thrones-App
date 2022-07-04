@@ -10,18 +10,40 @@ let state: IState = {
 const app = async () => {
   const cards = document.querySelector(".cards") as HTMLDivElement;
   const query = document.querySelector(".query") as HTMLInputElement;
+  const modal = document.querySelector(".modal") as HTMLDivElement;
+  const span = document.querySelector(".close") as HTMLSpanElement;
+  const name = document.querySelector(".name") as HTMLHeadingElement;
+  const region = document.querySelector(".region") as HTMLParagraphElement;
+  const coatOfArms = document.querySelector(
+    ".coatOfArms"
+  ) as HTMLParagraphElement;
 
   const setCards = (data: IHouse[]) => {
     cards.innerHTML = "";
 
     data.forEach((house) => {
-      const card = `
-          <div class="card">
-              <h3>${house.name}</h3>
-          </div>
-      `;
+      const cardContainer = document.createElement("div");
+      const cardTitle = document.createElement("h3");
 
-      cards.insertAdjacentHTML("beforeend", card);
+      cardContainer.className = "card";
+
+      cardTitle.className = "title";
+      cardTitle.innerText = house.name;
+
+      cardContainer.appendChild(cardTitle);
+
+      cards.appendChild(cardContainer);
+
+      cardTitle.addEventListener("click", () => {
+        house.name ? (name.innerText = house.name) : "";
+        house.region
+          ? (region.innerHTML = `<span class="bold">Region:</span> ${house.region}`)
+          : "";
+        house.coatOfArms
+          ? (coatOfArms.innerHTML = `<span class="bold">Coat of Arms:</span>  ${house.coatOfArms}`)
+          : "";
+        modal.style.display = "block";
+      });
     });
   };
 
@@ -42,6 +64,16 @@ const app = async () => {
 
     setCards(data);
   });
+
+  span.onclick = function () {
+    modal.style.display = "none";
+  };
+
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
 };
 
 app();
