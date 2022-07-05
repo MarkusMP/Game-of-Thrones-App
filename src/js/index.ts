@@ -26,12 +26,10 @@ const app = async () => {
       const cardTitle = document.createElement("h3");
 
       cardContainer.className = "card";
-
       cardTitle.className = "title";
       cardTitle.innerText = house.name;
 
       cardContainer.appendChild(cardTitle);
-
       cards.appendChild(cardContainer);
 
       cardTitle.addEventListener("click", () => {
@@ -65,12 +63,12 @@ const app = async () => {
     setCards(data);
   });
 
-  span.onclick = function () {
+  span.onclick = () => {
     modal.style.display = "none";
   };
 
-  window.onclick = function (event) {
-    if (event.target == modal) {
+  window.onclick = (e) => {
+    if (e.target == modal) {
       modal.style.display = "none";
     }
   };
