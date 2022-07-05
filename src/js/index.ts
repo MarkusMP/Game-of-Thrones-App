@@ -3,10 +3,12 @@ import axios from "axios";
 import { IHouse, IState } from "./interfaces";
 import { GET_HOUSES } from "./api";
 import { spinner } from "./utils/spinner";
+import { errorMessage } from "./utils/errorMessage";
 
 let state: IState = {
   houses: [],
   loading: false,
+  error: false,
 };
 
 const app = async () => {
@@ -58,8 +60,12 @@ const app = async () => {
     setCards(state.houses);
     state.loading = false;
   } catch (error) {
-    state.loading = false;
     console.log(error);
+
+    state.loading = false;
+    state.error = true;
+
+    errorMessage();
   }
 
   query.addEventListener("input", () => {
