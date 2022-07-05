@@ -2,9 +2,11 @@ import "../styles/main.scss";
 import axios from "axios";
 import { IHouse, IState } from "./interfaces";
 import { GET_HOUSES } from "./api";
+import { spinner } from "./utils/spinner";
 
 let state: IState = {
   houses: [],
+  loading: false,
 };
 
 const app = async () => {
@@ -46,12 +48,17 @@ const app = async () => {
   };
 
   try {
+    state.loading = true;
+    spinner();
+
     const res = await axios.get(GET_HOUSES);
 
     state.houses = res.data;
 
     setCards(state.houses);
+    state.loading = false;
   } catch (error) {
+    state.loading = false;
     console.log(error);
   }
 
