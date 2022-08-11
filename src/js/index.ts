@@ -9,6 +9,8 @@ let state: IState = {
   houses: [],
   loading: false,
   error: false,
+  page: 1,
+  pageSize: 10,
 };
 
 const app = async () => {
@@ -21,6 +23,9 @@ const app = async () => {
   const coatOfArms = document.querySelector(
     ".coatOfArms"
   ) as HTMLParagraphElement;
+  const next = document.querySelector(".next") as HTMLButtonElement;
+  const prev = document.querySelector(".prev") as HTMLButtonElement;
+  const one = document.querySelector(".one") as HTMLButtonElement;
 
   const setCards = (data: IHouse[]) => {
     cards.innerHTML = "";
@@ -49,24 +54,50 @@ const app = async () => {
     });
   };
 
-  try {
-    state.loading = true;
-    spinner();
+  const fetchData = async () => {
+    try {
+      state.loading = true;
+      spinner();
 
-    const res = await axios.get(GET_HOUSES);
+      const res = await axios.get(
+        GET_HOUSES({ page: state.page, pageSize: state.pageSize })
+      );
 
-    state.houses = res.data;
+      state.houses = res.data;
 
-    setCards(state.houses);
-    state.loading = false;
-  } catch (error) {
-    console.log(error);
+      setCards(state.houses);
+      state.loading = false;
+    } catch (error) {
+      console.log(error);
 
-    state.loading = false;
-    state.error = true;
+      state.loading = false;
+      state.error = true;
 
-    errorMessage();
-  }
+      errorMessage();
+    }
+  };
+
+  fetchData();
+
+  next.addEventListener("click", () => {
+    state.page = state.page + 1;
+
+    fetchData();
+  });
+
+  prev.addEventListener("click", () => {
+    if (state.page > 1) {
+      state.page = state.page - 1;
+      fetchData();
+    }
+  });
+
+  one.addEventListener("click", () => {
+    if (state.page !== 1) {
+      state.page = 1;
+      fetchData();
+    }
+  });
 
   query.addEventListener("input", () => {
     const data = state.houses.filter((house) =>
