@@ -2,6 +2,7 @@ export interface IState {
   houses: IHouse[];
   loading: boolean;
   error: boolean;
+  success: boolean;
   page: number;
   pageSize: number;
 }

@@ -9,6 +9,7 @@ let state: IState = {
   houses: [],
   loading: false,
   error: false,
+  success: false,
   page: 1,
   pageSize: 10,
 };
@@ -26,6 +27,31 @@ const app = async () => {
   const next = document.querySelector(".next") as HTMLButtonElement;
   const prev = document.querySelector(".prev") as HTMLButtonElement;
   const one = document.querySelector(".one") as HTMLButtonElement;
+
+  const reset = () => {
+    state.houses = [];
+    state.loading = false;
+    state.error = false;
+    state.success = false;
+  };
+
+  const updateUI = () => {
+    if (state.success) {
+      setCards(state.houses);
+    } else if (state.loading) {
+      spinner();
+    } else if (state.error) {
+      errorMessage();
+    }
+
+    if (state.page === 1) {
+      prev.disabled = true;
+      one.disabled = true;
+    } else if (state.page > 1) {
+      prev.disabled = false;
+      one.disabled = false;
+    }
+  };
 
   const setCards = (data: IHouse[]) => {
     cards.innerHTML = "";
@@ -56,24 +82,25 @@ const app = async () => {
 
   const fetchData = async () => {
     try {
+      reset();
       state.loading = true;
-      spinner();
+      updateUI();
 
       const res = await axios.get(
         GET_HOUSES({ page: state.page, pageSize: state.pageSize })
       );
 
       state.houses = res.data;
-
-      setCards(state.houses);
       state.loading = false;
+      state.success = true;
+      updateUI();
     } catch (error) {
       console.log(error);
 
       state.loading = false;
       state.error = true;
 
-      errorMessage();
+      updateUI();
     }
   };
 
